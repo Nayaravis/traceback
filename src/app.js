@@ -1,5 +1,21 @@
 const errorPreviewContainer = document.getElementById("error-preview");
 const errorList = document.getElementById("error-list");
+const errorForm = document.getElementById("error-form");
+const addErrorButton = document.getElementById("add-error-button");
+
+function clearForm() {
+    errorForm.reset();
+}
+
+function toggleForm() {
+    if (errorForm.classList.contains("hidden")) {
+        addErrorButton.textContent = "CLOSE_FORM ---";
+        errorForm.classList.remove("hidden");
+    } else {
+        addErrorButton.textContent = "ADD_ERROR +++";
+        errorForm.classList.add("hidden")
+    }
+}
 
 function displayEmpty() {
     errorPreviewContainer.innerHTML =  `
@@ -55,7 +71,7 @@ function createDetail(errorObject) {
         </div>
         <div class="pt-10 pb-5">
             <p class="text-yellow-500 text-lg font-semibold">SOLUTION:</p>
-            <p class="text-white p-4 bg-slate-800 mt-2 border-2 border-white">${errorObject.solution}</p>
+            <textarea class="text-white p-4 bg-slate-800 mt-2 border-2 border-white w-full h-fit">${errorObject.solution}</textarea>
         </div>
     </div>
     `
