@@ -7,9 +7,135 @@
     <link rel="stylesheet" href="./css/style.css">
 </head>
 <body class="font-mono bg-black">
-    <header class="fixed w-full h-20 flex px-5 justify-between items-center text-white border-b-white border-b-4 bg-black">
-        <h1 class="font-semibold text-3xl">TRACEBACK</h1>
-        <button class="font-medium text-xl text-black p-2.5 bg-pink-400 border-4 border-white">ADD_ERROR +++</button>
+    <header class="fixed w-full h-20 text-white border-b-white border-b-4 bg-black">
+        <div class="w-full flex px-5 justify-between items-center h-full">
+            <h1 class="font-semibold text-3xl">TRACEBACK</h1>
+            <button id="add-error-button" class="font-medium text-xl text-black p-2.5 bg-pink-500 border-4 border-white" onclick="toggleForm()">ADD_ERROR +++</button>
+        </div>
+        <div>
+            <form id="error-form" class="space-y-6 bg-black absolute min-w-2xl border-2 border-white p-3.5 hidden">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label for="title" class="block text-yellow-400 font-black mb-2 tracking-wider">
+                            ERROR_TITLE *
+                        </label>
+                        <input 
+                            type="text" 
+                            id="title" 
+                            name="title"
+                            placeholder="Cannot read property 'x' of undefined"
+                            class="w-full bg-black border-2 border-white p-3 text-white placeholder-gray-500 font-mono focus:border-pink-500 focus:outline-none transition-colors"
+                            required
+                        >
+                    </div>
+                    <div>
+                        <label for="project" class="block text-yellow-400 font-black mb-2 tracking-wider">
+                            PROJECT_NAME
+                        </label>
+                        <input 
+                            type="text" 
+                            id="project" 
+                            name="project"
+                            placeholder="Todo List App"
+                            class="w-full bg-black border-2 border-white p-3 text-white placeholder-gray-500 font-mono focus:border-pink-500 focus:outline-none transition-colors"
+                        >
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label for="description" class="block text-yellow-400 font-black mb-2 tracking-wider">
+                            ERROR_DESCRIPTION *
+                        </label>
+                        <textarea 
+                            id="description" 
+                            name="description"
+                            placeholder="Happens when accessing object property before initialization..."
+                            rows="4"
+                            class="w-full bg-black border-2 border-white p-3 text-white placeholder-gray-500 font-mono resize-none focus:border-pink-500 focus:outline-none transition-colors"
+                            required
+                        ></textarea>
+                    </div>
+                    <div>
+                        <label for="githubLink" class="block text-yellow-400 font-black mb-2 tracking-wider">
+                            GITHUB_LINK
+                        </label>
+                        <input 
+                            type="url" 
+                            id="githubLink" 
+                            name="githubLink"
+                            placeholder="https://github.com/user/project"
+                            class="w-full bg-black border-2 border-white p-3 text-white placeholder-gray-500 font-mono focus:border-pink-500 focus:outline-none transition-colors mb-4"
+                        >
+                        <label for="status" class="block text-yellow-400 font-black mb-2 tracking-wider">
+                            STATUS
+                        </label>
+                        <select 
+                            id="status" 
+                            name="status"
+                            class="w-full bg-black border-2 border-white p-3 text-white font-mono focus:border-pink-500 focus:outline-none transition-colors"
+                        >
+                            <option value="pending" class="bg-black">PENDING</option>
+                            <option value="solved" class="bg-black">SOLVED</option>
+                        </select>
+                    </div>
+                </div>
+                <div>
+                    <label for="code" class="block text-yellow-400 font-black mb-2 tracking-wider">
+                        CODE_SNIPPET *
+                    </label>
+                    <textarea 
+                        id="code" 
+                        name="code"
+                        placeholder="const x = obj.x; // obj is undefined"
+                        rows="6"
+                        class="w-full bg-gray-900 border-2 border-white p-4 text-white placeholder-gray-500 font-mono text-sm resize-none focus:border-pink-500 focus:outline-none transition-colors"
+                        required
+                    ></textarea>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label for="tags" class="block text-yellow-400 font-black mb-2 tracking-wider">
+                            TAGS
+                        </label>
+                        <input 
+                            type="text" 
+                            id="tags" 
+                            name="tags"
+                            placeholder="JavaScript, undefined, object"
+                            class="w-full bg-black border-2 border-white p-3 text-white placeholder-gray-500 font-mono focus:border-pink-500 focus:outline-none transition-colors"
+                        >
+                        <p class="text-xs text-gray-500 mt-1">Separate with commas</p>
+                    </div>
+                    <div>
+                        <label for="solution" class="block text-yellow-400 font-black mb-2 tracking-wider">
+                            SOLUTION
+                        </label>
+                        <textarea 
+                            id="solution" 
+                            name="solution"
+                            placeholder="Check if obj exists before accessing..."
+                            rows="4"
+                            class="w-full bg-black border-2 border-white p-3 text-white placeholder-gray-500 font-mono resize-none focus:border-pink-500 focus:outline-none transition-colors"
+                        ></textarea>
+                    </div>
+                </div>
+                <div class="flex items-center justify-between pt-6 border-t-2 border-white">
+                    <button 
+                        type="button"
+                        onclick="clearForm()"
+                        class="px-6 py-3 border-2 border-white bg-black text-white font-black tracking-wider hover:bg-white hover:text-black transition-colors"
+                    >
+                        CLEAR_FORM
+                    </button>
+                    <button 
+                        type="submit"
+                        class="px-8 py-3 bg-pink-500 text-black font-black tracking-wider border-4 border-white hover:bg-yellow-400 transition-colors"
+                    >
+                        SUBMIT_ERROR
+                    </button>
+                </div>
+            </form>
+        </div>
     </header>
     <div class="pt-20 h-screen flex">
         <aside class="w-md h-full border-r-4 border-r-white box-border overflow-y-auto">
@@ -20,7 +146,7 @@
 
             </ul>
         </aside>
-        <main id="error-preview" class="w-full h-full overflow-y-scroll">
+        <main id="error-preview" class="w-full h-full overflow-y-auto">
 
         </main>
     </div>
