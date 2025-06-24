@@ -6,7 +6,21 @@
     <title>Traceback</title>
     <link rel="stylesheet" href="./css/style.css">
 </head>
-<body>
+<body class="font-mono bg-black">
+    <header class="fixed w-full h-20 flex px-5 justify-between items-center text-white border-b-white border-b-4">
+        <h1 class="font-semibold text-3xl">TRACEBACK</h1>
+        <button class="font-medium text-xl text-black p-2.5 bg-pink-500 border-4 border-white">ADD_ERROR +++</button>
+    </header>
+    <div class="pt-20 h-screen flex">
+        <aside class="w-md h-full border-r-4 border-r-white">
+            <div class="w-full p-4 text-2xl font-semibold text-white border-b-2 border-b-white">
+                <p>ERROR_LIST</p>
+            </div>
+        </aside>
+        <main id="error-preview" class="w-full h-full">
+
+        </main>
+    </div>
     <script src="./src/app.js"></script>
 </body>
 </html>
