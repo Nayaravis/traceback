@@ -9,7 +9,7 @@ Traceback provides a clean, dark-themed interface for logging, categorizing, and
 ## Features
 
 - **Project-based organization**: Separate error logs by project with sidebar navigation
-- **Status tracking**: Mark errors as solved, pending, or mark for editing/deletion
+- **Status tracking**: Mark errors as solved, pending, or mark for editing
 - **Code snippet storage**: Store problematic code with syntax highlighting
 - **GitHub integration**: Direct links to project repositories
 - **Solution tracking**: Document how errors were resolved
