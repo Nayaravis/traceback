@@ -63,7 +63,7 @@ errorForm.addEventListener("submit", e => {
         .then(errorObject => {
             toggleForm();
             clearForm();
-            console.log(errorObject)
+            errorList.innerHTML = createErrorCard(errorObject) + errorList.innerHTML;
         })
 })
 
@@ -137,7 +137,7 @@ function openErrorDetails(errorID) {
 
 function createErrorCard(errorObject) {
     return `
-    <li onclick="openErrorDetails(${errorObject.id})" class="p-3.5 w-full border-b-2 border-b-gray-400 select-none cursor-pointer">
+    <li onclick="openErrorDetails('${errorObject.id}')" class="p-3.5 w-full border-b-2 border-b-gray-400 select-none cursor-pointer">
         <span class="p-1.5 text-sm font-semibold 
         ${
             errorObject.status === "solved"
