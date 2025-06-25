@@ -5,14 +5,24 @@ const addErrorButton = document.getElementById("add-error-button");
 const navContainer = document.getElementById("nav-container");
 const mainNav = document.getElementById("main-nav");
 
+function displayEmpty() {
+    errorPreviewContainer.innerHTML =  `
+    <div class="w-full h-full flex items-center justify-center text-gray-400">
+        <p class="text-2xl font-semibold">SELECT_ERROR_FROM_SIDEBAR</p>
+    </div>
+    `;
+};
+
 function clearForm() {
     errorForm.reset();
 }
 
-function getErrors(callback) {
+function getErrors() {
     fetch("http://localhost:3000/errors")
         .then(res => res.json())
-        .then(callback);
+        .then(errors => errors.map(error => {
+            errorList.innerHTML += createErrorCard(error)
+        }).join(""));
 };
 
 function toggleForm() {
@@ -41,7 +51,7 @@ errorForm.addEventListener("submit", e => {
     const githubLink = errorForm.githubLink.value.trim();
     const status = errorForm.status.value;
     const code = errorForm.code.value;
-    const tags = errorForm.tags.value.split(",");
+    const tags = errorForm.tags.value.split(", ");
     const solution = errorForm.solution.value.trim();
 
     const data = {
@@ -72,14 +82,6 @@ errorForm.addEventListener("submit", e => {
             errorList.innerHTML = createErrorCard(errorObject) + errorList.innerHTML;
         })
 })
-
-function displayEmpty() {
-    errorPreviewContainer.innerHTML =  `
-    <div class="w-full h-full flex items-center justify-center text-gray-400">
-        <p class="text-2xl font-semibold">SELECT_ERROR_FROM_SIDEBAR</p>
-    </div>
-    `;
-};
 
 function createDetail(errorObject) {
     return `
@@ -133,6 +135,7 @@ function createDetail(errorObject) {
     `
 }
 
+// for concurrency of the GET and POST requests
 async function toggleErrorStatus(errorId) {
   try {
     // Fetch the current error
@@ -161,8 +164,7 @@ async function toggleErrorStatus(errorId) {
   }
 }
 
-
-function startEditError(errorId) {
+function startErrorEdit(errorId) {
     openErrorDetails(errorId, true);
 }
 
@@ -197,8 +199,8 @@ function saveErrorEdit(errorId) {
   }
 }
 
-
 let editMode = false;
+
 function createDetail(errorObject, isEditing = editMode) {
     const statusBadgeClass = errorObject.status === 'solved' 
         ? 'bg-yellow-400 text-black' 
@@ -236,7 +238,7 @@ function createDetail(errorObject, isEditing = editMode) {
                             MARK_${statusToggleText}
                         </button>
                         <button
-                            onclick="startEditError(${errorObject.id})"
+                            onclick="startErrorEdit(${errorObject.id})"
                             class="px-4 py-2 bg-pink-500 text-black font-black text-xs border-2 border-white hover:bg-yellow-400 transition-colors"
                         >
                             EDIT_ERROR
@@ -409,7 +411,5 @@ function createErrorCard(errorObject) {
 
 document.addEventListener("DOMContentLoaded", () => {
     displayEmpty();
-    getErrors(errors => errors.map(error => {
-        errorList.innerHTML += createErrorCard(error)
-    }).join(""));
+    getErrors();
 });
