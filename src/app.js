@@ -2,6 +2,8 @@ const errorPreviewContainer = document.getElementById("error-preview");
 const errorList = document.getElementById("error-list");
 const errorForm = document.getElementById("error-form");
 const addErrorButton = document.getElementById("add-error-button");
+const navContainer = document.getElementById("nav-container");
+const mainNav = document.getElementById("main-nav");
 
 function clearForm() {
     errorForm.reset();
@@ -11,9 +13,17 @@ function toggleForm() {
     if (errorForm.classList.contains("hidden")) {
         addErrorButton.textContent = "CLOSE_FORM ---";
         errorForm.classList.remove("hidden");
+        navContainer.classList.remove("h-20");
+        navContainer.classList.add("h-screen");
+        mainNav.classList.remove("h-full");
+        mainNav.classList.add("h-20");
     } else {
         addErrorButton.textContent = "ADD_ERROR +++";
-        errorForm.classList.add("hidden")
+        errorForm.classList.add("hidden");
+        navContainer.classList.add("h-20");
+        navContainer.classList.remove("h-screen");
+        mainNav.classList.remove("h-20");
+        mainNav.classList.add("h-full");
     }
 }
 
