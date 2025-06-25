@@ -27,6 +27,46 @@ function toggleForm() {
     }
 }
 
+errorForm.addEventListener("submit", e => {
+    e.preventDefault();
+    const errorTitle = errorForm.title.value;
+    const projectName = errorForm.project.value.trim();
+    const errorDescription = errorForm.description.value;
+    const githubLink = errorForm.githubLink.value.trim();
+    const status = errorForm.status.value;
+    const code = errorForm.code.value;
+    const tags = errorForm.tags.value.split(",");
+    const solution = errorForm.solution.value.trim();
+
+    const data = {
+        title: errorTitle,
+        description: errorDescription,
+        code: code,
+        tags: tags,
+        status: status,
+        solution: solution,
+        timestamp: new Date().toISOString(),
+        project: projectName,
+        githubLink: githubLink
+    }
+
+    const requestOptions = {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
+    }
+
+    fetch("http://localhost:3000/errors", requestOptions)
+        .then(res => res.json())
+        .then(errorObject => {
+            toggleForm();
+            clearForm();
+            console.log(errorObject)
+        })
+})
+
 function displayEmpty() {
     errorPreviewContainer.innerHTML =  `
     <div class="w-full h-full flex items-center justify-center text-gray-400">
