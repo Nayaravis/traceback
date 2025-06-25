@@ -133,14 +133,16 @@ function createDetail(errorObject) {
     `
 }
 
-function toggleErrorStatus(errorId) {
+async function toggleErrorStatus(errorId) {
   try {
-    const res = fetch(`http://localhost:3000/errors/${errorId}`);
-    const error = res.json();
+    // Fetch the current error
+    const res = await fetch(`http://localhost:3000/errors/${errorId}`);
+    const error = await res.json();
 
     const updatedStatus = error.status === 'solved' ? 'pending' : 'solved';
 
-    fetch(`http://localhost:3000/errors/${errorId}`, {
+    // Update the status
+    await fetch(`http://localhost:3000/errors/${errorId}`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
@@ -148,12 +150,17 @@ function toggleErrorStatus(errorId) {
       body: JSON.stringify({ status: updatedStatus }),
     });
 
-    // Rerender preview
+    // Rerender or refresh UI
     openErrorDetails(errorId);
+    errorList.innerHTML = ""
+    getErrors(errors => errors.map(error => {
+        errorList.innerHTML += createErrorCard(error)
+    }).join(""));
   } catch (err) {
-    console.error(`Error toggling status:`, err);
+    console.error(`Error toggling status for error ${errorId}:`, err);
   }
 }
+
 
 function startEditError(errorId) {
     openErrorDetails(errorId, true);
@@ -216,12 +223,11 @@ function createDetail(errorObject, isEditing = editMode) {
 
     return `
         <div class="flex-1 p-6 overflow-y-auto bg-black">
-            <div class="flex items-center justify-between mb-6 pb-4 border-b-2 border-gray-800">
+            <div class="flex items-center mb-6 pb-4 border-b-2 border-gray-800">
                 <div class="flex items-center gap-4">
                     <span class="px-3 py-1 font-black text-sm ${statusBadgeClass}">
                         ${errorObject.status.toUpperCase()}
                     </span>
-
                     ${!isEditing ? `
                         <button
                             onclick="toggleErrorStatus(${errorObject.id})"
@@ -250,13 +256,6 @@ function createDetail(errorObject, isEditing = editMode) {
                         </button>
                     `}
                 </div>
-
-                <button
-                    onclick="deleteError(${errorObject.id})"
-                    class="px-4 py-2 bg-red-500 text-white font-black text-xs border-2 border-white hover:bg-red-700 transition-colors"
-                >
-                    DELETE_ERROR
-                </button>
             </div>
             <div class="space-y-6">
                 <div>
@@ -269,7 +268,7 @@ function createDetail(errorObject, isEditing = editMode) {
                             class="w-full text-2xl font-black bg-gray-900 border-2 border-white p-3 text-white font-mono"
                         />
                         ` : `
-                        <h1 class="text-2xl font-black mb-4 tracking-wide">${errorObject.title}</h1>
+                        <h1 class="text-2xl font-black mb-4 tracking-wide text-white">${errorObject.title}</h1>
                     `}
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 p-4 bg-gray-900 border-l-4 border-pink-500">
@@ -283,7 +282,7 @@ function createDetail(errorObject, isEditing = editMode) {
                                     class="w-full bg-black border-2 border-white p-2 text-white font-mono"
                                 />
                                 ` : `
-                                <p class="font-bold">${projectDisplay}</p>
+                                <p class="font-bold text-white">${projectDisplay}</p>
                             `}
                     </div>
                 <div>
@@ -309,7 +308,7 @@ function createDetail(errorObject, isEditing = editMode) {
                         class="w-full bg-gray-900 p-4 border-2 border-white text-white font-mono resize-none"
                   >${errorObject.description}</textarea>
                 ` : `
-                    <p class="bg-gray-900 p-4 border-l-4 border-white leading-relaxed">${errorObject.description}</p>
+                    <p class="bg-gray-900 p-4 border-l-4 border-white leading-relaxed text-white">${errorObject.description}</p>
                 `}
             </div>
             <div>
