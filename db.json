@@ -10,7 +10,7 @@
         "DOM",
         "null"
       ],
-      "status": "solved",
+      "status": "pending",
       "solution": "Wrap in DOMContentLoaded event or place script before closing body tag:\ndocument.addEventListener('DOMContentLoaded', () => {\n  const button = document.getElementById('submit-btn');\n  if (button) {\n    button.addEventListener('click', handleClick);\n  }\n});",
       "timestamp": "2025-06-25T13:11:53.153Z",
       "project": "Todo List App",
@@ -93,7 +93,7 @@
       ],
       "status": "pending",
       "solution": "",
-      "timestamp": "2025-06-24T11:20:00Z",
+      "timestamp": "2025-06-26T05:46:17.362Z",
       "project": "Registration Form",
       "githubLink": "https://github.com/user/registration"
     },

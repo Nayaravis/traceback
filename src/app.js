@@ -154,17 +154,19 @@ async function toggleErrorStatus(errorId) {
     });
 
     // Rerender or refresh UI
-    openErrorDetails(errorId);
-    document.getElementById(`error_${errorId}`).innerHTML = `
-    <div class="p-1.5 text-sm font-semibold inline
-    ${
-        updatedStatus === "solved"
-        ? "bg-yellow-500"
-        : "bg-pink-500"
-    }">
-        ${updatedStatus.toUpperCase()}
-    </div>
-    `;
+    for (errorStatus of document.querySelectorAll(`#error_${errorId}`)) {
+        errorStatus.innerHTML = `
+        <div class="p-1.5 text-sm font-semibold inline
+        ${
+            updatedStatus === "solved"
+            ? "bg-yellow-500"
+            : "bg-pink-500"
+        }">
+            ${updatedStatus.toUpperCase()}
+        </div>
+        `;
+    }
+    document.getElementById(`toggle-status-${errorId}`).textContent = `MARK_${error.status.toUpperCase()}`
   } catch (err) {
     console.error(`Error toggling status for error ${errorId}:`, err);
   }
@@ -208,10 +210,6 @@ function saveErrorEdit(errorId) {
 let editMode = false;
 
 function createDetail(errorObject, isEditing = editMode) {
-    const statusBadgeClass = errorObject.status === 'solved' 
-        ? 'bg-yellow-400 text-black' 
-        : 'bg-pink-500 text-black';
-  
     const statusToggleText = errorObject.status === 'solved' ? 'PENDING' : 'SOLVED';
   
     const tagsHTML = errorObject.tags.map(tag => 
@@ -233,11 +231,19 @@ function createDetail(errorObject, isEditing = editMode) {
         <div class="flex-1 p-6 overflow-y-auto bg-black">
             <div class="flex items-center mb-6 pb-4 border-b-2 border-gray-800">
                 <div class="flex items-center gap-4">
-                    <span class="px-3 py-1 font-black text-sm ${statusBadgeClass}">
-                        ${errorObject.status.toUpperCase()}
+                    <span id="error_${errorObject.id}">
+                        <div class="p-1.5 text-sm font-semibold inline
+                        ${
+                            errorObject.status === "solved"
+                            ? "bg-yellow-500"
+                            : "bg-pink-500"
+                        }">
+                            ${errorObject.status.toUpperCase()}
+                        </div>
                     </span>
                     ${!isEditing ? `
                         <button
+                            id="toggle-status-${errorObject.id}"
                             onclick="toggleErrorStatus(${errorObject.id})"
                             class="px-4 py-2 border-2 border-white bg-black text-white font-black text-xs hover:bg-white hover:text-black transition-colors"
                         >
