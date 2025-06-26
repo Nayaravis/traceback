@@ -155,10 +155,16 @@ async function toggleErrorStatus(errorId) {
 
     // Rerender or refresh UI
     openErrorDetails(errorId);
-    errorList.innerHTML = ""
-    getErrors(errors => errors.map(error => {
-        errorList.innerHTML += createErrorCard(error)
-    }).join(""));
+    document.getElementById(`error_${errorId}`).innerHTML = `
+    <div class="p-1.5 text-sm font-semibold inline
+    ${
+        updatedStatus === "solved"
+        ? "bg-yellow-500"
+        : "bg-pink-500"
+    }">
+        ${updatedStatus.toUpperCase()}
+    </div>
+    `;
   } catch (err) {
     console.error(`Error toggling status for error ${errorId}:`, err);
   }
@@ -390,14 +396,15 @@ function openErrorDetails(errorID, isEditing = false) {
 function createErrorCard(errorObject) {
     return `
     <li onclick="openErrorDetails('${errorObject.id}')" class="p-3.5 w-full border-b-2 border-b-gray-400 select-none cursor-pointer">
-        <span class="p-1.5 text-sm font-semibold 
-        ${
-            errorObject.status === "solved"
-            ? "bg-yellow-500"
-            : "bg-pink-500"
-        }
-        ">
-        ${errorObject.status.toUpperCase()}
+        <span id="error_${errorObject.id}">
+            <div class="p-1.5 text-sm font-semibold inline
+            ${
+                errorObject.status === "solved"
+                ? "bg-yellow-500"
+                : "bg-pink-500"
+            }">
+                ${errorObject.status.toUpperCase()}
+            </div>
         </span>
         <p class="text-white py-1.5 text-xl truncate">
         ${errorObject.title}
