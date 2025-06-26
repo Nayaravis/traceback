@@ -1,3 +1,5 @@
+let errorsList = [];
+const baseUrl = "https://traceback-backend.onrender.com/errors"
 const errorPreviewContainer = document.getElementById("error-preview");
 const errorList = document.getElementById("error-list");
 const errorForm = document.getElementById("error-form");
@@ -18,11 +20,15 @@ function clearForm() {
 }
 
 function getErrors() {
-    fetch("http://localhost:3000/errors")
+    fetch(baseUrl)
         .then(res => res.json())
-        .then(errors => errors.map(error => {
-            errorList.innerHTML += createErrorCard(error)
-        }).join(""));
+        .then(errors => {
+            errorsList.push(errors);
+            console.log(errorsList);
+            errors.map(error => {
+            errorList.innerHTML += createErrorCard(error);
+            }).join("")
+        });
 };
 
 function toggleForm() {
@@ -74,78 +80,28 @@ errorForm.addEventListener("submit", e => {
         body: JSON.stringify(data)
     }
 
-    fetch("http://localhost:3000/errors", requestOptions)
+    fetch(baseUrl, requestOptions)
         .then(res => res.json())
         .then(errorObject => {
             toggleForm();
             clearForm();
+            errorsList.push(errorObject);
             errorList.innerHTML = createErrorCard(errorObject) + errorList.innerHTML;
         })
 })
 
-function createDetail(errorObject) {
-    return `
-    <div class="w-full h-full p-8">
-        <div>
-            <span class="p-1.5 text-sm font-semibold 
-            ${
-                errorObject.status === "solved"
-                ? "bg-yellow-500"
-                : "bg-pink-500"
-            }
-            ">
-            ${errorObject.status.toUpperCase()}
-            </span>
-        </div>
-        <p class="text-white py-7 text-4xl font-semibold">
-        ${errorObject.title}
-        </p>
-        <div class="flex gap-20">
-            <div>
-                <p class="text-yellow-500 text-lg font-semibold">PROJECT:</p>
-                <p class="text-white text-lg py-2.5">${errorObject.project}</p>
-            </div>
-            <div>
-                <p class="text-yellow-500 text-lg font-semibold">TIMESTAMP:</p>
-                <p class="text-white text-lg py-2.5">${errorObject.timestamp}</p>
-            </div>
-        </div>
-        <a class="text-pink-500 text-lg font-semibold underline underline-offset-8" href="${errorObject.githubLink}">VIEW_REPO →</a>
-        <div class="pt-10">
-            <p class="text-yellow-500 text-lg font-semibold">DESCRIPTION:</p>
-            <p class="text-white text-lg p-4 bg-slate-800 mt-2 border-l-4 border-l-white">${errorObject.description}</p>
-        </div>
-        <div class="pt-10">
-            <p class="text-yellow-500 text-lg font-semibold">CODE:</p>
-            <p class="text-white p-4 bg-slate-800 mt-2 border-2 border-white">${errorObject.code}</p>
-        </div>
-        <div class="pt-10">
-            <p class="text-yellow-500 text-lg font-semibold">TAGS:</p>
-            <div class="flex gap-3">
-                ${errorObject.tags.map(tag => {
-                    return `<span class="p-1 bg-white text-black font-semibold">${tag}</span>`
-                }).join("")}
-            </div>
-        </div>
-        <div class="pt-10 pb-5">
-            <p class="text-yellow-500 text-lg font-semibold">SOLUTION:</p>
-            <textarea class="text-white p-4 bg-slate-800 mt-2 border-2 border-white w-full h-fit">${errorObject.solution}</textarea>
-        </div>
-    </div>
-    `
-}
 
 // for concurrency of the GET and POST requests
 async function toggleErrorStatus(errorId) {
   try {
     // Fetch the current error
-    const res = await fetch(`http://localhost:3000/errors/${errorId}`);
+    const res = await fetch(baseUrl + "/" + errorId);
     const error = await res.json();
 
     const updatedStatus = error.status === 'solved' ? 'pending' : 'solved';
 
     // Update the status
-    await fetch(`http://localhost:3000/errors/${errorId}`, {
+    await fetch(baseUrl + "/" + errorId, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
@@ -193,7 +149,7 @@ function saveErrorEdit(errorId) {
       timestamp: new Date().toISOString()
     };
 
-    fetch(`http://localhost:3000/errors/${errorId}`, {
+    fetch(baseUrl + "/" + errorId, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
@@ -392,7 +348,7 @@ function createDetail(errorObject, isEditing = editMode) {
 }
 
 function openErrorDetails(errorID, isEditing = false) {
-    fetch(`http://localhost:3000/errors/${errorID}`)
+    fetch(baseUrl + "/" + errorID)
         .then(res => res.json())
         .then(error => {
             errorPreviewContainer.innerHTML = createDetail(error, isEditing);
